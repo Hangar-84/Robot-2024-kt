@@ -1,6 +1,6 @@
 # Robot Code — 2024 (Kotlin Edition)
 This repository contains Hangar 84's robot code for the 2023-2024 FRC season.
-This project utilizes `Kotlin` and is based upon .
+This project utilizes `Kotlin` and is based upon the `commands` framework.
 
 ### Copyright Notice
 ```
