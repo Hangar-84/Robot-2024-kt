@@ -64,12 +64,9 @@ object DriveSubsystem : Subsystem {
     fun arcadeDrive(forwardSpeed: Double, rotationSpeed: Double) {
         var zRotation = rotationSpeed
 
-        if (abs(forwardSpeed) < driftCorrectionDeadband) {
-            if (forwardSpeed > 0.0) {
-                zRotation = driftCorrectionRotation
-            } else if (forwardSpeed < 0.0) {
-                zRotation = -driftCorrectionRotation
-            }
+        if (abs(zRotation) < ROTATION_DEADBAND) {
+            val distanceError = leftEncoder.distance - rightEncoder.distance
+            zRotation = driftCorrectionPID.calculate(distanceError).coerceIn(-1.0, 1.0)
         }
 
         differentialDrive.arcadeDrive(forwardSpeed, zRotation)
