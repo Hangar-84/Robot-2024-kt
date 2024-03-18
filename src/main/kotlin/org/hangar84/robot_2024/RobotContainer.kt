@@ -8,6 +8,7 @@ package org.hangar84.robot_2024
 import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import org.hangar84.robot_2024.commands.DriveDistanceCommand
 import org.hangar84.robot_2024.subsystems.DriveSubsystem
 import org.hangar84.robot_2024.subsystems.LauncherSubsystem
 import org.hangar84.robot_2024.wrappers.InvertableCommandXboxController
@@ -15,6 +16,11 @@ import org.hangar84.robot_2024.wrappers.InvertableCommandXboxController
 
 object RobotContainer {
     private val controller = InvertableCommandXboxController(0)
+
+    val autonomousCommand: Command
+        get() {
+            return DriveDistanceCommand(12.0 * 5.0)
+        }
 
 
     init {
@@ -46,18 +52,5 @@ object RobotContainer {
             { LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis) },
             LauncherSubsystem
         )
-    }
-
-    fun getAutonomousCommand(): Command {
-        return Commands
-            .run(
-                { DriveSubsystem.arcadeDrive(0.5, 0.0) },
-                DriveSubsystem
-            )
-            .withTimeout(2.0)
-            .andThen(
-                { DriveSubsystem.differentialDrive.stopMotor() },
-                DriveSubsystem
-            )
     }
 }
