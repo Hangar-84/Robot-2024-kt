@@ -29,7 +29,9 @@ data object DataTable {
     val rightVelocityEntry = table.getEntry("Right Velocity")
 
     val leftVoltageEntry = table.getEntry("Left Voltage")
+    val leftFollowerVoltageEntry = table.getEntry("Left Follower Voltage")
     val rightVoltageEntry = table.getEntry("Right Voltage")
+    val rightFollowerVoltageEntry = table.getEntry("Right Follower Voltage")
 
     val staticGainEntry = table.getEntry("Static Gain")
     val velocityGainEntry = table.getEntry("Velocity Gain")
@@ -125,7 +127,10 @@ object DriveSubsystem : Subsystem {
         )
 
         DataTable.leftVoltageEntry.setDouble(leftMotor.motorOutputVoltage)
+        DataTable.leftFollowerVoltageEntry.setDouble(leftFollowerMotor.motorOutputVoltage)
         DataTable.rightVoltageEntry.setDouble(rightMotor.motorOutputVoltage)
+        DataTable.rightFollowerVoltageEntry.setDouble(rightFollowerMotor.motorOutputVoltage)
+
         DataTable.leftVelocityEntry.setDouble(leftEncoder.rate)
         DataTable.rightVelocityEntry.setDouble(rightEncoder.rate)
 
