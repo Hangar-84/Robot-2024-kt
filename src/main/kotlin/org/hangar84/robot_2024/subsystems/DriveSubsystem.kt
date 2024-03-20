@@ -72,7 +72,7 @@ object DriveSubsystem : Subsystem {
     )
 
     // TODO: Measure track width
-    private val differentialDriveKinematics = DifferentialDriveKinematics(TRACK_WIDTH * METER_CONVERSION_FACTOR)
+    private val differentialDriveKinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
     // See: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html
     private var leftFeedforward = SimpleMotorFeedforward(0.0, 0.0, 0.0)
@@ -89,8 +89,8 @@ object DriveSubsystem : Subsystem {
 
     val chassisSpeeds
         get() = ChassisSpeeds(
-            leftEncoder.rate * METER_CONVERSION_FACTOR,
-            rightEncoder.rate * METER_CONVERSION_FACTOR,
+            leftEncoder.rate,
+            rightEncoder.rate,
             Math.toRadians(imu.rate)
         )
 
@@ -120,8 +120,8 @@ object DriveSubsystem : Subsystem {
     override fun periodic() {
         differentialDriveOdometry.update(
             Rotation2d.fromDegrees(imu.angle),
-            leftEncoder.distance * METER_CONVERSION_FACTOR,
-            rightEncoder.distance * METER_CONVERSION_FACTOR
+            leftEncoder.distance,
+            rightEncoder.distance
         )
 
         DataTable.leftVoltageEntry.setDouble(leftMotor.motorOutputVoltage)
