@@ -10,8 +10,8 @@ import com.revrobotics.CANSparkMax
 import edu.wpi.first.wpilibj2.command.Subsystem
 
 object LauncherSubsystem : Subsystem {
-    val launcherMotor = CANSparkMax(1, CANSparkLowLevel.MotorType.kBrushless)
-    private val launcherFollowerMotor = CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushless)
+    val launcherMotor = CANSparkMax(1, CANSparkLowLevel.MotorType.kBrushed)
+    private val launcherFollowerMotor = CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushed)
 
     init {
         launcherFollowerMotor.follow(launcherMotor)
