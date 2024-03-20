@@ -65,12 +65,16 @@ object RobotContainer {
 
         // Teleop-based default commands
         DriveSubsystem.defaultCommand = Commands.run(
-            { DriveSubsystem.arcadeDrive(controller.leftY, controller.rightX) },
+            {
+                DriveSubsystem.arcadeDrive(controller.leftY, controller.rightX)
+            },
             DriveSubsystem
         )
 
         LauncherSubsystem.defaultCommand = Commands.run(
-            { LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis) },
+            {
+                LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis)
+            },
             LauncherSubsystem
         )
     }
