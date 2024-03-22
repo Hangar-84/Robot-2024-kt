@@ -61,7 +61,6 @@ object DriveSubsystem : Subsystem {
 
     // Inertial Measurement Unit
     private val imu = ADIS16470_IMU()
-    private val rotation2d = Rotation2d.fromDegrees(imu.angle)
 
     internal val leftEncoder = Encoder(0, 1, true, CounterBase.EncodingType.k4X)
     internal val rightEncoder = Encoder(2, 3, false, CounterBase.EncodingType.k4X)
@@ -90,6 +89,9 @@ object DriveSubsystem : Subsystem {
 
     val pose: Pose2d
         get() = differentialDriveOdometry.poseMeters
+
+    private val rotation2d
+        get() = Rotation2d.fromDegrees(imu.angle)
 
     val chassisSpeeds
         get() = ChassisSpeeds(
