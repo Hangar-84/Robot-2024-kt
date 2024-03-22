@@ -16,6 +16,18 @@
           "data": {
             "pathName": "Leave Zone - Top"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Launch"
+          }
         }
       ]
     }
