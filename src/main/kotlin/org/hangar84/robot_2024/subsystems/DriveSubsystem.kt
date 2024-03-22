@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry
+import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.CounterBase
@@ -25,17 +26,17 @@ import edu.wpi.first.wpilibj2.command.Subsystem
 data object DataTable {
     private val table = NetworkTableInstance.getDefault().getTable("DriveData")
 
-    val leftVelocityEntry = table.getEntry("Left Velocity")
-    val rightVelocityEntry = table.getEntry("Right Velocity")
+    val leftVelocityEntry: NetworkTableEntry = table.getEntry("Left Velocity")
+    val rightVelocityEntry: NetworkTableEntry = table.getEntry("Right Velocity")
 
-    val leftVoltageEntry = table.getEntry("Left Voltage")
-    val leftFollowerVoltageEntry = table.getEntry("Left Follower Voltage")
-    val rightVoltageEntry = table.getEntry("Right Voltage")
-    val rightFollowerVoltageEntry = table.getEntry("Right Follower Voltage")
+    val leftVoltageEntry: NetworkTableEntry = table.getEntry("Left Voltage")
+    val leftFollowerVoltageEntry: NetworkTableEntry = table.getEntry("Left Follower Voltage")
+    val rightVoltageEntry: NetworkTableEntry = table.getEntry("Right Voltage")
+    val rightFollowerVoltageEntry: NetworkTableEntry = table.getEntry("Right Follower Voltage")
 
-    val staticGainEntry = table.getEntry("Static Gain")
-    val velocityGainEntry = table.getEntry("Velocity Gain")
-    val accelerationGainEntry = table.getEntry("Acceleration Gain")
+    val staticGainEntry: NetworkTableEntry = table.getEntry("Static Gain")
+    val velocityGainEntry: NetworkTableEntry = table.getEntry("Velocity Gain")
+    val accelerationGainEntry: NetworkTableEntry = table.getEntry("Acceleration Gain")
 }
 
 object DriveSubsystem : Subsystem {
