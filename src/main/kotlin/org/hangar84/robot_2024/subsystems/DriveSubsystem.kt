@@ -51,8 +51,8 @@ object DriveSubsystem : Subsystem {
     private const val DISTANCE_PER_PULSE = WHEEL_CIRCUMFERENCE / (PULSES_PER_REVOLUTION * GEAR_RATIO)
 
 
-    internal val leftMotor = WPI_TalonSRX(0)
-    internal val rightMotor = WPI_TalonSRX(1)
+    private val leftMotor = WPI_TalonSRX(0)
+    private val rightMotor = WPI_TalonSRX(1)
 
     private val leftFollowerMotor = WPI_VictorSPX(0)
     private val rightFollowerMotor = WPI_VictorSPX(1)
