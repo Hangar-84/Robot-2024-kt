@@ -101,7 +101,8 @@ object DriveSubsystem : Subsystem {
         )
 
     init {
-        leftMotor.inverted = true
+        rightMotor.inverted = true
+        rightFollowerMotor.inverted = true
 
         leftFollowerMotor.follow(leftMotor)
         rightFollowerMotor.follow(rightMotor)
