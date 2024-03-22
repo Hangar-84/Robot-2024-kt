@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Subsystem
+import kotlin.math.abs
 
 data object DataTable {
     private val table = NetworkTableInstance.getDefault().getTable("DriveData")
@@ -165,6 +166,14 @@ object DriveSubsystem : Subsystem {
 
     fun arcadeDrive(forwardSpeed: Double, rotationSpeed: Double) {
         var zRotation = rotationSpeed
+
+        if (abs(zRotation) < 0.15) {
+            if (forwardSpeed > 0) {
+                zRotation = 0.1
+            } else if (forwardSpeed < 0) {
+                zRotation = -0.1
+            }
+        }
 
         differentialDrive.arcadeDrive(forwardSpeed, zRotation)
     }
