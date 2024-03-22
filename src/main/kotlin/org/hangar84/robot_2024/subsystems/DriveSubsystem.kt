@@ -78,8 +78,8 @@ object DriveSubsystem : Subsystem {
     private val differentialDriveKinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
     // See: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html
-    private var leftFeedforward = SimpleMotorFeedforward(0.0, 0.0, 0.0)
-    private var rightFeedforward = SimpleMotorFeedforward(0.0, 0.0, 0.0)
+    private var leftFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
+    private var rightFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
 
     private const val DRIVE_P = 0.05
     private const val DRIVE_I = 0.0
