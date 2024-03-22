@@ -6,6 +6,7 @@
 package org.hangar84.robot_2024
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.util.ReplanningConfig
 import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.math.geometry.Pose2d
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import org.hangar84.robot_2024.subsystems.DriveSubsystem
 import org.hangar84.robot_2024.subsystems.LauncherSubsystem
 import org.hangar84.robot_2024.wrappers.InvertableCommandXboxController
@@ -37,6 +39,7 @@ object RobotContainer {
         CameraServer.startAutomaticCapture("Rear Camera", 1)
 
         configureBindings()
+        configureNamedCommands()
 
         AutoBuilder.configureRamsete(
             { DriveSubsystem.pose },
@@ -76,6 +79,48 @@ object RobotContainer {
                 LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis)
             },
             LauncherSubsystem
+        )
+    }
+
+    private fun configureNamedCommands() {
+        NamedCommands.registerCommand(
+            "Launch",
+            Commands
+                .runOnce(
+                    {
+                        LauncherSubsystem.launcherMotor.set(1.0)
+                    },
+                    LauncherSubsystem
+                )
+                .andThen(
+                    WaitCommand(1.0)
+                )
+                .andThen(
+                    {
+                        LauncherSubsystem.launcherMotor.set(0.0)
+                    },
+                    LauncherSubsystem
+                )
+        )
+
+        NamedCommands.registerCommand(
+            "Intake",
+            Commands
+                .runOnce(
+                    {
+                        LauncherSubsystem.launcherMotor.set(-1.0)
+                    },
+                    LauncherSubsystem
+                )
+                .andThen(
+                    WaitCommand(1.0)
+                )
+                .andThen(
+                    {
+                        LauncherSubsystem.launcherMotor.set(0.0)
+                    },
+                    LauncherSubsystem
+                )
         )
     }
 }
