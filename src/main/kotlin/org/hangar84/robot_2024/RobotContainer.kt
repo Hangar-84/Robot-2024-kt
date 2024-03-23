@@ -20,11 +20,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import org.hangar84.robot_2024.subsystems.DriveSubsystem
 import org.hangar84.robot_2024.subsystems.LauncherSubsystem
-import org.hangar84.robot_2024.wrappers.InvertableCommandXboxController
+import org.hangar84.robot_2024.wrappers.InvertibleCommandXboxController
 
 
 object RobotContainer {
-    private val controller = InvertableCommandXboxController(0)
+    private val controller = InvertibleCommandXboxController(0)
     private var autoChooser: SendableChooser<Command>? = null
 
     val autonomousCommand: Command
