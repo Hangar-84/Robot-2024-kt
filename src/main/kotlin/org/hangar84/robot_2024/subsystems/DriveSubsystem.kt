@@ -114,9 +114,13 @@ object DriveSubsystem : Subsystem {
      */
     private val differentialDriveKinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
-    // See: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html
-    private var leftFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
-    private var rightFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
+    /**
+     * The feedforward used to calculate the motor output based on the desired speed.
+     *
+     * See: [WPILib Docs](https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html)
+     * @see SimpleMotorFeedforward
+     */
+    private var driveFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
 
     private const val DRIVE_P = 0.05
     // TODO: Tune PID constants
@@ -182,9 +186,9 @@ object DriveSubsystem : Subsystem {
         SmartDashboard.putData("Right Encoder", rightEncoder)
         SmartDashboard.putData("IMU", imu)
 
-        DataTable.staticGainEntry.setDouble(leftFeedforward.ks)
-        DataTable.velocityGainEntry.setDouble(leftFeedforward.kv)
-        DataTable.accelerationGainEntry.setDouble(leftFeedforward.ka)
+        DataTable.staticGainEntry.setDouble(driveFeedforward.ks)
+        DataTable.velocityGainEntry.setDouble(driveFeedforward.kv)
+        DataTable.accelerationGainEntry.setDouble(driveFeedforward.ka)
     }
 
     override fun periodic() {
@@ -202,15 +206,13 @@ object DriveSubsystem : Subsystem {
         DataTable.leftVelocityEntry.setDouble(leftEncoder.rate)
         DataTable.rightVelocityEntry.setDouble(rightEncoder.rate)
 
-        val staticGain = DataTable.staticGainEntry.getDouble(leftFeedforward.ks)
-        val velocityGain = DataTable.velocityGainEntry.getDouble(leftFeedforward.kv)
-        val accelerationGain = DataTable.accelerationGainEntry.getDouble(leftFeedforward.ka)
+        val staticGain = DataTable.staticGainEntry.getDouble(driveFeedforward.ks)
+        val velocityGain = DataTable.velocityGainEntry.getDouble(driveFeedforward.kv)
+        val accelerationGain = DataTable.accelerationGainEntry.getDouble(driveFeedforward.ka)
 
-        if (leftFeedforward.ks != staticGain || leftFeedforward.kv != velocityGain || leftFeedforward.ka != accelerationGain)
-            leftFeedforward = SimpleMotorFeedforward(staticGain, velocityGain, accelerationGain)
+        if (driveFeedforward.ks != staticGain || driveFeedforward.kv != velocityGain || driveFeedforward.ka != accelerationGain)
+            driveFeedforward = SimpleMotorFeedforward(staticGain, velocityGain, accelerationGain)
 
-        if (rightFeedforward.ks != staticGain || rightFeedforward.kv != velocityGain || rightFeedforward.ka != accelerationGain)
-            rightFeedforward = SimpleMotorFeedforward(staticGain, velocityGain, accelerationGain)
     }
 
     /**
@@ -232,8 +234,8 @@ object DriveSubsystem : Subsystem {
     fun driveRelative(relativeSpeeds: ChassisSpeeds) {
         val wheelSpeeds = differentialDriveKinematics.toWheelSpeeds(relativeSpeeds)
 
-        val leftFed = leftFeedforward.calculate(wheelSpeeds.leftMetersPerSecond)
-        val rightFed = rightFeedforward.calculate(wheelSpeeds.rightMetersPerSecond)
+        val leftFed = driveFeedforward.calculate(wheelSpeeds.leftMetersPerSecond)
+        val rightFed = driveFeedforward.calculate(wheelSpeeds.rightMetersPerSecond)
 
         val leftOutput = leftPIDController.calculate(leftEncoder.rate, wheelSpeeds.leftMetersPerSecond)
         val rightOutput = rightPIDController.calculate(rightEncoder.rate, wheelSpeeds.rightMetersPerSecond)
