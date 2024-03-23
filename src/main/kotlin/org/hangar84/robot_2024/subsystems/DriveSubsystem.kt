@@ -44,12 +44,12 @@ data object DataTable {
 }
 
 object DriveSubsystem : Subsystem {
-    private const val METER_CONVERSION_FACTOR = 0.0254
     // -- Constants --
+    private const val METER_CONVERSION_FACTOR = 39.3701
 
-    private const val TRACK_WIDTH = 21.8 * METER_CONVERSION_FACTOR
     private const val PULSES_PER_REVOLUTION = 8192.0
-    private const val WHEEL_DIAMETER = 6.0 * METER_CONVERSION_FACTOR
+    private const val TRACK_WIDTH = 21.8 / METER_CONVERSION_FACTOR
+    private const val WHEEL_DIAMETER = 6.0 / METER_CONVERSION_FACTOR
     private const val WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI
     private const val GEAR_RATIO = 1.0 / 1.0
     private const val DISTANCE_PER_PULSE = WHEEL_CIRCUMFERENCE / (PULSES_PER_REVOLUTION * GEAR_RATIO)
