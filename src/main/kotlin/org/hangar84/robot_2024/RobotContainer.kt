@@ -64,6 +64,7 @@ object RobotContainer {
      * - **Right Trigger**: Launcher (Shoot)
      */
     private fun configureBindings() {
+        // Invert the Y-axis of the left joystick using our custom InvertibleCommandXboxController class.
         controller.yAxisInverted = true
 
         // Teleop-based default commands
@@ -73,6 +74,14 @@ object RobotContainer {
             },
             DriveSubsystem
         )
+        // -- Teleop-based default commands --
+        /*
+        Drive the robot using arcade drive.
+        The left joystick Y-axis controls forward/backward movement, while the right joystick X-axis controls turning
+        left/right.
+
+        TODO: See if X-axis inversion is necessary.
+         */
 
         LauncherSubsystem.defaultCommand = Commands.run(
             {
@@ -80,9 +89,13 @@ object RobotContainer {
             },
             LauncherSubsystem
         )
+        /*
+        Control the launcher using the left (intake/negative power) and right (launch/positive power) triggers.
+         */
     }
 
     private fun configureNamedCommands() {
+        // Launch the note game piece.
         NamedCommands.registerCommand(
             "Launch",
             Commands
@@ -103,6 +116,7 @@ object RobotContainer {
                 )
         )
 
+        // Take in the note game piece.
         NamedCommands.registerCommand(
             "Intake",
             Commands

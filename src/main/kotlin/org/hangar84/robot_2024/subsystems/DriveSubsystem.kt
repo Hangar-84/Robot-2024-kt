@@ -24,6 +24,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Subsystem
 import kotlin.math.abs
 
+/**
+ * Data table containing all network table entries for the drive subsystem.
+ */
 data object DataTable {
     private val table = NetworkTableInstance.getDefault().getTable("DriveData")
 
@@ -42,6 +45,7 @@ data object DataTable {
 
 object DriveSubsystem : Subsystem {
     private const val METER_CONVERSION_FACTOR = 0.0254
+    // -- Constants --
 
     private const val TRACK_WIDTH = 21.8 * METER_CONVERSION_FACTOR
     private const val PULSES_PER_REVOLUTION = 8192.0
@@ -51,21 +55,49 @@ object DriveSubsystem : Subsystem {
     private const val DISTANCE_PER_PULSE = WHEEL_CIRCUMFERENCE / (PULSES_PER_REVOLUTION * GEAR_RATIO)
 
 
+    // -- Components --
     private val leftMotor = WPI_TalonSRX(0)
     private val rightMotor = WPI_TalonSRX(1)
 
+    /**
+     * The left follower motor, which follows the left motor's output.
+     */
     private val leftFollowerMotor = WPI_VictorSPX(0)
+
+    /**
+     * The right follower motor, which follows the right motor's output.
+     */
     private val rightFollowerMotor = WPI_VictorSPX(1)
 
-    val differentialDrive = DifferentialDrive(leftMotor, rightMotor)
-
-    // Inertial Measurement Unit
+    /**
+     * The Inertial Measurement Unit (IMU) used to track the robot's rotation, acceleration, and orientation.
+     *
+     * @see ADIS16470_IMU
+     */
     private val imu = ADIS16470_IMU()
 
+    /**
+     * The left encoder used to track the distance traveled by the left side of the robot.
+     *
+     * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
+     * @see Encoder
+     */
     internal val leftEncoder = Encoder(0, 1, true, CounterBase.EncodingType.k4X)
+
+    /**
+     * The right encoder used to track the distance traveled by the right side of the robot.
+     *
+     * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
+     * @see Encoder
+     */
     internal val rightEncoder = Encoder(2, 3, false, CounterBase.EncodingType.k4X)
 
 
+    // -- Attributes --
+    /**
+     * The odometry used to track the robot's position and orientation.
+     * @see DifferentialDriveOdometry
+     */
     private val differentialDriveOdometry = DifferentialDriveOdometry(
         Rotation2d.fromDegrees(imu.angle),
         leftEncoder.distance,
@@ -74,7 +106,10 @@ object DriveSubsystem : Subsystem {
         Pose2d()
     )
 
-    // TODO: Measure track width
+    /**
+     * The kinematics used to calculate the robot's wheel speeds based on the desired chassis speeds.
+     * @see DifferentialDriveKinematics
+     */
     private val differentialDriveKinematics = DifferentialDriveKinematics(TRACK_WIDTH)
 
     // See: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html
@@ -82,14 +117,37 @@ object DriveSubsystem : Subsystem {
     private var rightFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
 
     private const val DRIVE_P = 0.05
+    // TODO: Tune PID constants
     private const val DRIVE_I = 0.0
     private const val DRIVE_D = 0.0
+
+    /**
+     * The PID controller used to adjust the left motor's output based on the desired speed.
+     * @see PIDController
+     */
     internal val leftPIDController = PIDController(DRIVE_P, DRIVE_I, DRIVE_D)
+
+    /**
+     * The PID controller used to adjust the right motor's output based on the desired speed.
+     * @see PIDController
+     */
     internal val rightPIDController = PIDController(DRIVE_P, DRIVE_I, DRIVE_D)
 
+    /**
+     * The current pose of the robot based on the differential drive odometry.
+     *
+     * @see DifferentialDriveOdometry
+     * @see Pose2d
+     */
     val pose: Pose2d
         get() = differentialDriveOdometry.poseMeters
 
+    /**
+     * The current rotation of the robot based on the IMU.
+     *
+     * @see ADIS16470_IMU.getAngle
+     * @see Rotation2d
+     */
     private val rotation2d
         get() = Rotation2d.fromDegrees(imu.angle)
 
@@ -98,6 +156,9 @@ object DriveSubsystem : Subsystem {
             leftEncoder.rate,
             rightEncoder.rate,
             Math.toRadians(imu.rate)
+    /**
+     * The current speed of the robot in meters per second.
+     */
         )
 
     init {
@@ -150,10 +211,22 @@ object DriveSubsystem : Subsystem {
             rightFeedforward = SimpleMotorFeedforward(staticGain, velocityGain, accelerationGain)
     }
 
+    /**
+     * Resets the robot's pose based on the provided [Pose2d].
+     *
+     * @param pose The new pose of the robot.
+     */
     fun resetPose(pose: Pose2d) {
         differentialDriveOdometry.resetPosition(rotation2d, leftEncoder.distance, rightEncoder.distance, pose)
     }
 
+    /**
+     * Drives the robot using [ChassisSpeeds] relative to the robot's frame of reference.
+     * This method uses [SimpleMotorFeedforward]s and [PIDController]s to adjust the motor output to reach the desired
+     * speed.
+     *
+     * @param relativeSpeeds The desired speed of the robot.
+     */
     fun driveRelative(relativeSpeeds: ChassisSpeeds) {
         val wheelSpeeds = differentialDriveKinematics.toWheelSpeeds(relativeSpeeds)
 
@@ -167,6 +240,14 @@ object DriveSubsystem : Subsystem {
         rightMotor.setVoltage(rightFed + rightOutput)
     }
 
+    /**
+     * Custom wrapper around [DifferentialDrive.arcadeDrive] to account for drift when the robot is moving
+     * forward/backward.
+     *
+     * @param forwardSpeed The forward/backward speed of the robot.
+     * @param rotationSpeed The rotation speed of the robot.
+     * @see DifferentialDrive.arcadeDrive
+     */
     fun arcadeDrive(forwardSpeed: Double, rotationSpeed: Double) {
         var zRotation = rotationSpeed
 
