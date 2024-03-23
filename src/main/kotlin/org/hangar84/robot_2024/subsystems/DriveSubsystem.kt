@@ -94,6 +94,8 @@ object DriveSubsystem : Subsystem {
 
 
     // -- Attributes --
+    val differentialDrive = DifferentialDrive(leftMotor, rightMotor)
+
     /**
      * The odometry used to track the robot's position and orientation.
      * @see DifferentialDriveOdometry
