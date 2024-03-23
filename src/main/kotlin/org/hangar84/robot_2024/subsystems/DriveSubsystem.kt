@@ -123,8 +123,8 @@ object DriveSubsystem : Subsystem {
      */
     private var driveFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
 
-    private const val DRIVE_P = 0.05
     // TODO: Tune PID constants
+    private const val DRIVE_P = 0.0
     private const val DRIVE_I = 0.0
     private const val DRIVE_D = 0.0
 
