@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.ADIS16470_IMU
@@ -157,14 +158,12 @@ object DriveSubsystem : Subsystem {
     private val rotation2d
         get() = Rotation2d.fromDegrees(imu.angle)
 
-    val chassisSpeeds
-        get() = ChassisSpeeds(
-            leftEncoder.rate,
-            rightEncoder.rate,
-            Math.toRadians(imu.rate)
     /**
-     * The current speed of the robot in meters per second.
+     * The current speeds of the robot in meters per second.
      */
+    val chassisSpeeds: ChassisSpeeds
+        get() = differentialDriveKinematics.toChassisSpeeds(
+            DifferentialDriveWheelSpeeds(leftEncoder.rate, rightEncoder.rate)
         )
 
     init {
