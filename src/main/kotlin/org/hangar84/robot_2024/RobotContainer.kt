@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import org.hangar84.robot_2024.subsystems.DriveSubsystem
@@ -67,13 +66,6 @@ object RobotContainer {
         // Invert the Y-axis of the left joystick using our custom InvertibleCommandXboxController class.
         controller.yAxisInverted = true
 
-        // Teleop-based default commands
-        DriveSubsystem.defaultCommand = Commands.run(
-            {
-                DriveSubsystem.arcadeDrive(controller.leftY, -controller.rightX)
-            },
-            DriveSubsystem
-        )
         // -- Teleop-based default commands --
         /*
         Drive the robot using arcade drive.
@@ -82,58 +74,50 @@ object RobotContainer {
 
         TODO: See if X-axis inversion is necessary.
          */
+        DriveSubsystem.defaultCommand = DriveSubsystem.run {
+            DriveSubsystem.arcadeDrive(controller.leftY, -controller.rightX)
+        }
 
-        LauncherSubsystem.defaultCommand = Commands.run(
-            {
-                LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis)
-            },
-            LauncherSubsystem
-        )
         /*
         Control the launcher using the left (intake/negative power) and right (launch/positive power) triggers.
          */
+        LauncherSubsystem.defaultCommand = LauncherSubsystem.run {
+            LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis)
+        }
     }
 
     private fun configureNamedCommands() {
         // Launch the note game piece.
         NamedCommands.registerCommand(
             "Launch",
-            Commands
-                .runOnce(
-                    {
-                        LauncherSubsystem.launcherMotor.set(1.0)
-                    },
-                    LauncherSubsystem
-                )
+            LauncherSubsystem
+                .runOnce {
+                    LauncherSubsystem.launcherMotor.set(1.0)
+                }
                 .andThen(
                     WaitCommand(1.0)
                 )
                 .andThen(
-                    {
+                    LauncherSubsystem.runOnce {
                         LauncherSubsystem.launcherMotor.set(0.0)
-                    },
-                    LauncherSubsystem
+                    }
                 )
         )
 
         // Take in the note game piece.
         NamedCommands.registerCommand(
             "Intake",
-            Commands
-                .runOnce(
-                    {
-                        LauncherSubsystem.launcherMotor.set(-1.0)
-                    },
-                    LauncherSubsystem
-                )
+            LauncherSubsystem
+                .runOnce {
+                    LauncherSubsystem.launcherMotor.set(-1.0)
+                }
                 .andThen(
                     WaitCommand(1.0)
                 )
                 .andThen(
-                    {
+                    LauncherSubsystem.runOnce {
                         LauncherSubsystem.launcherMotor.set(0.0)
-                    },
-                    LauncherSubsystem
+                    }
                 )
         )
     }
