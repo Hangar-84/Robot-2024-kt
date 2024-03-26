@@ -18,9 +18,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "Arrive at Speaker - Top"
           }
         },
         {
