@@ -83,7 +83,7 @@ object DriveSubsystem : Subsystem {
      * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
      * @see Encoder
      */
-    internal val leftEncoder = Encoder(0, 1, true, CounterBase.EncodingType.k4X)
+    internal val leftEncoder = Encoder(0, 1, false, CounterBase.EncodingType.k4X)
 
     /**
      * The right encoder used to track the distance traveled by the right side of the robot.
@@ -91,7 +91,7 @@ object DriveSubsystem : Subsystem {
      * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
      * @see Encoder
      */
-    internal val rightEncoder = Encoder(2, 3, false, CounterBase.EncodingType.k4X)
+    internal val rightEncoder = Encoder(2, 3, true, CounterBase.EncodingType.k4X)
 
 
     // -- Attributes --
