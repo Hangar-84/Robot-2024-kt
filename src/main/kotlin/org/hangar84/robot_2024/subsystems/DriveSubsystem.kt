@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.ADIS16470_IMU
-import edu.wpi.first.wpilibj.CounterBase
 import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -55,7 +54,6 @@ object DriveSubsystem : Subsystem {
     private const val GEAR_RATIO = 1.0 / 1.0
     private const val DISTANCE_PER_PULSE = WHEEL_CIRCUMFERENCE / (PULSES_PER_REVOLUTION * GEAR_RATIO)
 
-
     // -- Components --
     private val leftMotor = WPI_TalonSRX(0)
     private val rightMotor = WPI_TalonSRX(1)
@@ -83,7 +81,7 @@ object DriveSubsystem : Subsystem {
      * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
      * @see Encoder
      */
-    internal val leftEncoder = Encoder(0, 1, false, CounterBase.EncodingType.k4X)
+    internal val leftEncoder = Encoder(0, 1, true)
 
     /**
      * The right encoder used to track the distance traveled by the right side of the robot.
@@ -91,8 +89,7 @@ object DriveSubsystem : Subsystem {
      * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
      * @see Encoder
      */
-    internal val rightEncoder = Encoder(2, 3, true, CounterBase.EncodingType.k4X)
-
+    internal val rightEncoder = Encoder(2, 3, true)
 
     // -- Attributes --
     val differentialDrive = DifferentialDrive(leftMotor, rightMotor)
@@ -101,13 +98,14 @@ object DriveSubsystem : Subsystem {
      * The odometry used to track the robot's position and orientation.
      * @see DifferentialDriveOdometry
      */
-    private val differentialDriveOdometry = DifferentialDriveOdometry(
-        Rotation2d.fromDegrees(imu.angle),
-        leftEncoder.distance,
-        rightEncoder.distance,
-        // TODO: Configure initial pose(?)
-        Pose2d()
-    )
+    private val differentialDriveOdometry =
+        DifferentialDriveOdometry(
+            Rotation2d.fromDegrees(imu.angle),
+            leftEncoder.distance,
+            rightEncoder.distance,
+            // TODO: Configure initial pose(?)
+            Pose2d(),
+        )
 
     /**
      * The kinematics used to calculate the robot's wheel speeds based on the desired chassis speeds.
@@ -162,9 +160,10 @@ object DriveSubsystem : Subsystem {
      * The current speeds of the robot in meters per second.
      */
     val chassisSpeeds: ChassisSpeeds
-        get() = differentialDriveKinematics.toChassisSpeeds(
-            DifferentialDriveWheelSpeeds(leftEncoder.rate, rightEncoder.rate)
-        )
+        get() =
+            differentialDriveKinematics.toChassisSpeeds(
+                DifferentialDriveWheelSpeeds(leftEncoder.rate, rightEncoder.rate),
+            )
 
     init {
         rightMotor.inverted = true
@@ -194,7 +193,7 @@ object DriveSubsystem : Subsystem {
         differentialDriveOdometry.update(
             Rotation2d.fromDegrees(imu.angle),
             leftEncoder.distance,
-            rightEncoder.distance
+            rightEncoder.distance,
         )
 
         DataTable.leftVoltageEntry.setDouble(leftMotor.motorOutputVoltage)
@@ -209,9 +208,9 @@ object DriveSubsystem : Subsystem {
         val velocityGain = DataTable.velocityGainEntry.getDouble(driveFeedforward.kv)
         val accelerationGain = DataTable.accelerationGainEntry.getDouble(driveFeedforward.ka)
 
-        if (driveFeedforward.ks != staticGain || driveFeedforward.kv != velocityGain || driveFeedforward.ka != accelerationGain)
+        if (driveFeedforward.ks != staticGain || driveFeedforward.kv != velocityGain || driveFeedforward.ka != accelerationGain) {
             driveFeedforward = SimpleMotorFeedforward(staticGain, velocityGain, accelerationGain)
-
+        }
     }
 
     /**
@@ -251,7 +250,10 @@ object DriveSubsystem : Subsystem {
      * @param rotationSpeed The rotation speed of the robot.
      * @see DifferentialDrive.arcadeDrive
      */
-    fun arcadeDrive(forwardSpeed: Double, rotationSpeed: Double) {
+    fun arcadeDrive(
+        forwardSpeed: Double,
+        rotationSpeed: Double,
+    ) {
         var zRotation = rotationSpeed
 
         if (abs(zRotation) < 0.15) {
