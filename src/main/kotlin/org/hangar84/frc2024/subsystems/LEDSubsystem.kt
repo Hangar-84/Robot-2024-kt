@@ -3,7 +3,7 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.subsystems
+package org.hangar84.frc2024.subsystems
 
 import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import org.hangar84.robot_2024.Robot
-import org.hangar84.robot_2024.animations.*
-import org.hangar84.robot_2024.animationsystem.Animation
-import org.hangar84.robot_2024.animationsystem.ZiaComponents
+import org.hangar84.frc2024.Robot
+import org.hangar84.frc2024.animations.*
+import org.hangar84.frc2024.animationsystem.Animation
+import org.hangar84.frc2024.animationsystem.ZiaComponents
 import kotlin.jvm.optionals.getOrNull
 
 object LEDSubsystem : SubsystemBase() {

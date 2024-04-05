@@ -3,14 +3,13 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.wrappers
+package org.hangar84.frc2024.wrappers
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 
 class InvertibleCommandXboxController(port: Int) : CommandXboxController(port) {
     var xAxisInverted = false
     var yAxisInverted = false
-
 
     override fun getLeftX(): Double {
         return if (xAxisInverted) -super.getLeftX() else super.getLeftX()

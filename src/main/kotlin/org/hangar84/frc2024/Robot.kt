@@ -1,4 +1,9 @@
-package org.hangar84.robot_2024
+/*
+ * Robot 2024 (Kotlin Edition) — Kotlin version of our robot code for the 2023-2024 FRC season.
+ * Copyright (C) 2024  Hangar 84
+ */
+
+package org.hangar84.frc2024
 
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
@@ -22,11 +27,9 @@ object Robot : TimedRobot() {
     }
 
     override fun disabledInit() {
-
     }
 
     override fun disabledPeriodic() {
-
     }
 
     override fun teleopInit() {
@@ -34,7 +37,6 @@ object Robot : TimedRobot() {
     }
 
     override fun teleopPeriodic() {
-
     }
 
     override fun autonomousInit() {
@@ -42,7 +44,6 @@ object Robot : TimedRobot() {
     }
 
     override fun autonomousPeriodic() {
-
     }
 
     override fun testInit() {
@@ -50,14 +51,11 @@ object Robot : TimedRobot() {
     }
 
     override fun testPeriodic() {
-
     }
 
     override fun simulationInit() {
-
     }
 
     override fun simulationPeriodic() {
-
     }
 }

@@ -3,7 +3,7 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.subsystems
+package org.hangar84.frc2024.subsystems
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX
@@ -17,6 +17,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.units.Units.Inches
+import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
@@ -45,14 +47,12 @@ data object DataTable {
 
 object DriveSubsystem : Subsystem {
     // -- Constants --
-    private const val METER_CONVERSION_FACTOR = 39.3701
-
-    private const val TRACK_WIDTH = 21.8 / METER_CONVERSION_FACTOR
     private const val PULSES_PER_REVOLUTION = 2048
-    private const val WHEEL_DIAMETER = 6.0 / METER_CONVERSION_FACTOR
-    private const val WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI
     private const val GEAR_RATIO = 1.0 / 1.0
-    private const val DISTANCE_PER_PULSE = WHEEL_CIRCUMFERENCE / (PULSES_PER_REVOLUTION * GEAR_RATIO)
+    private val TRACK_WIDTH = Meters.convertFrom(21.8, Inches)
+    private val WHEEL_DIAMETER = Meters.convertFrom(6.0, Inches)
+    private val WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI
+    private val DISTANCE_PER_PULSE = WHEEL_CIRCUMFERENCE / (PULSES_PER_REVOLUTION * GEAR_RATIO)
 
     // -- Components --
     private val leftMotor = WPI_TalonSRX(0)

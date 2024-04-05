@@ -3,9 +3,8 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.animationsystem
+package org.hangar84.frc2024
 
-data class ColorMap(
-    val indices: Set<Int>,
-    val color: RGB,
-)
+import edu.wpi.first.wpilibj.RobotBase
+
+fun main() = RobotBase.startRobot { Robot }

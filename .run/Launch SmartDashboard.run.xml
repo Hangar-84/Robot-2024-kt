@@ -1,3 +1,8 @@
+<!--
+  ~ Robot 2024 (Kotlin Edition) — Kotlin version of our robot code for the 2023-2024 FRC season.
+  ~ Copyright (C) 2024  Hangar 84
+  -->
+
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Launch SmartDashboard" type="JarApplication" activateToolWindowBeforeRun="false">
     <option name="JAR_PATH" value="C:\Users\Public\wpilib\2024\tools\artifacts\SmartDashboard-2024.3.2-winx64.jar" />
