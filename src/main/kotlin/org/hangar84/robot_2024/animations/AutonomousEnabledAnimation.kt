@@ -15,51 +15,51 @@ object AutonomousEnabledAnimation : Animation(
                     listOf(
                         ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.RED),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
                         ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.AMBER),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
                         ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.RED),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
                         ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.AMBER),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
                         ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.RED),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
                         ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.AMBER),
                     ),
-                frameLength = 0.15,
-                frameGap = 0.15,
+                frameLength = 0.10,
+                frameGap = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING, RGB.YELLOW),
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
                         ColorMap(ZiaComponents.RING_1, RGB.AMBER),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
@@ -67,16 +67,16 @@ object AutonomousEnabledAnimation : Animation(
                         ColorMap(ZiaComponents.RING_1, RGB.AMBER),
                         ColorMap(ZiaComponents.RING_2, RGB.AMBER),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING, RGB.YELLOW),
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
                         ColorMap(ZiaComponents.RING_2, RGB.AMBER),
                         ColorMap(ZiaComponents.RING_3, RGB.AMBER),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
@@ -84,16 +84,49 @@ object AutonomousEnabledAnimation : Animation(
                         ColorMap(ZiaComponents.RING_3, RGB.AMBER),
                         ColorMap(ZiaComponents.ALL_TIPS, RGB.AMBER),
                     ),
-                frameLength = 0.15,
+                frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING, RGB.YELLOW),
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
                         ColorMap(ZiaComponents.ALL_TIPS, RGB.AMBER),
                     ),
-                frameLength = 0.15,
-                frameGap = 0.15,
+                frameLength = 0.10,
+                frameGap = 0.10,
+            ),
+            AnimationFrame(
+                buffer =
+                listOf(
+                    ColorMap(ZiaComponents.RING_3, RGB.AMBER),
+                    ColorMap(ZiaComponents.ALL_TIPS, RGB.AMBER),
+                ),
+                frameLength = 0.10,
+            ),
+            AnimationFrame(
+                buffer =
+                listOf(
+                    ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
+                    ColorMap(ZiaComponents.RING_2, RGB.AMBER),
+                    ColorMap(ZiaComponents.RING_3, RGB.AMBER),
+                ),
+                frameLength = 0.10,
+            ),
+            AnimationFrame(
+                buffer =
+                listOf(
+                    ColorMap(ZiaComponents.RING_1, RGB.AMBER),
+                    ColorMap(ZiaComponents.RING_2, RGB.AMBER),
+                ),
+                frameLength = 0.10,
+            ),
+            AnimationFrame(
+                buffer =
+                listOf(
+                    ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
+                    ColorMap(ZiaComponents.RING_1, RGB.AMBER),
+                ),
+                frameLength = 0.10,
             ),
         ),
 )

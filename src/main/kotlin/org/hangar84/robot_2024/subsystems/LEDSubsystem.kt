@@ -33,8 +33,8 @@ object LEDSubsystem : SubsystemBase() {
                 return ClockAnimation
             } else if (DriverStation.getMatchTime() != -1.0 && Robot.isDisabled) {
                 return EmergencyAlertAnimation
-            } else if (Robot.isDisabled) {
-                return WaveAnimation
+            } else if (Robot.isDisabled && !DriverStation.isEStopped()) {
+                return CycloneAnimation
             } else if (DriverStation.isEStopped()) {
                 return EmergencyAlertAnimation
             } else if (Robot.isAutonomousEnabled) {

@@ -8,14 +8,18 @@ package org.hangar84.robot_2024.animationsystem
 data class RGB(val r: Int, val g: Int, val b: Int) {
     companion object {
         val BLACK = RGB(0, 0, 0)
-        val WHITE = RGB(255, 255, 255)
-        val RED = RGB(255, 0, 0)
-        val GREEN = RGB(0, 255, 0)
-        val BLUE = RGB(0, 0, 255)
-        val YELLOW = RGB(255, 255, 0)
-        val CYAN = RGB(0, 255, 255)
-        val MAGENTA = RGB(255, 0, 255)
+        val WHITE = RGB(100, 100, 100)
+        val RED = RGB(100, 0, 0)
+        val GREEN = RGB(0, 100, 0)
+        val BLUE = RGB(0, 0, 100)
+        val YELLOW = RGB(100, 33, 0)
+        val CYAN = RGB(0, 100, 100)
+        val MAGENTA = RGB(100, 0, 100)
 
-        val AMBER = RGB(100, 75, 0)
+        val BRIGHT_WHITE = RGB(255, 255, 255)
+        val BRIGHT_RED = RGB(255, 0, 0)
+        val BRIGHT_BLUE = RGB(0, 0, 255)
+
+        val AMBER = RGB(100, 20, 0)
     }
 }

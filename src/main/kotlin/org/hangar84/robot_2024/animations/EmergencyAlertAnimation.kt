@@ -13,63 +13,72 @@ object EmergencyAlertAnimation : Animation(
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.BLUE),
+                        ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.BRIGHT_BLUE),
                     ),
-                frameLength = 0.1,
+                frameLength = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.RED),
+                        ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.BRIGHT_RED),
                     ),
-                frameLength = 0.1,
+                frameLength = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.BLUE),
+                        ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.BRIGHT_BLUE),
                     ),
-                frameLength = 0.1,
+                frameLength = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.RED),
+                        ColorMap(ZiaComponents.CENTER_RING_CORNERS, RGB.BRIGHT_RED),
                     ),
-                frameLength = 0.1,
+                frameLength = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.BLUE),
+                        ColorMap(ZiaComponents.CENTER_RING_EDGES, RGB.BRIGHT_BLUE),
                     ),
-                frameLength = 0.05,
+                frameLength = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING, RGB.WHITE),
-                        ColorMap(ZiaComponents.ALL_RAYS, RGB.RED),
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.BRIGHT_WHITE),
+                        ColorMap(ZiaComponents.ALL_RAYS, RGB.BRIGHT_RED),
                     ),
-                frameLength = 0.1,
-                frameGap = 0.1,
+                frameLength = 0.075,
+                frameGap = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING, RGB.WHITE),
-                        ColorMap(ZiaComponents.ALL_RAYS, RGB.RED),
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.BRIGHT_WHITE),
+                        ColorMap(ZiaComponents.ALL_RAYS, RGB.BRIGHT_RED),
                     ),
-                frameLength = 0.1,
-                frameGap = 0.1,
+                frameLength = 0.075,
+                frameGap = 0.075,
+            ),
+            AnimationFrame(
+                buffer =
+                listOf(
+                    ColorMap(ZiaComponents.CENTER_RING, RGB.BRIGHT_WHITE),
+                    ColorMap(ZiaComponents.ALL_RAYS, RGB.BRIGHT_RED),
+                ),
+                frameLength = 0.075,
+                frameGap = 0.075,
             ),
             AnimationFrame(
                 buffer =
                     listOf(
-                        ColorMap(ZiaComponents.CENTER_RING, RGB.WHITE),
-                        ColorMap(ZiaComponents.ALL_RAYS, RGB.RED),
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.BRIGHT_WHITE),
+                        ColorMap(ZiaComponents.ALL_RAYS, RGB.BRIGHT_RED),
                     ),
-                frameLength = 0.1,
+                frameLength = 0.075,
             ),
         ),
 )
