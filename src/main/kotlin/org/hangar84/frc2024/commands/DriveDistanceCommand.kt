@@ -3,14 +3,13 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.commands
+package org.hangar84.frc2024.commands
 
 import edu.wpi.first.wpilibj2.command.Command
-import org.hangar84.robot_2024.subsystems.DriveSubsystem
+import org.hangar84.frc2024.subsystems.DriveSubsystem
 
 class DriveDistanceCommand(private val distanceInches: Double) : Command() {
     private val driveSubsystem = DriveSubsystem
-
 
     init {
         addRequirements(driveSubsystem)

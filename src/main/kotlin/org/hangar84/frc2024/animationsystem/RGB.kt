@@ -3,7 +3,7 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.animationsystem
+package org.hangar84.frc2024.animationsystem
 
 data class RGB(val r: Int, val g: Int, val b: Int) {
     companion object {

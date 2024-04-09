@@ -3,9 +3,9 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.animations
+package org.hangar84.frc2024.animations
 
-import org.hangar84.robot_2024.animationsystem.*
+import org.hangar84.frc2024.animationsystem.*
 
 object EmergencyAlertAnimation : Animation(
     frames =

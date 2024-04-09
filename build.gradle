@@ -13,7 +13,12 @@ java {
     targetCompatibility = javaVersion
 }
 
-def ROBOT_MAIN_CLASS = "org.hangar84.robot_2024.MainKt"
+def ROBOT_MAIN_CLASS = "org.hangar84.frc2024.MainKt"
+
+/*
+ * Robot 2024 (Kotlin Edition) — Kotlin version of our robot code for the 2023-2024 FRC season.
+ * Copyright (C) 2024  Hangar 84
+ */
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.

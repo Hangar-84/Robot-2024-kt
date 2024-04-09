@@ -3,7 +3,7 @@
  * Copyright (C) 2024  Hangar 84
  */
 
-package org.hangar84.robot_2024.subsystems
+package org.hangar84.frc2024.subsystems
 
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
