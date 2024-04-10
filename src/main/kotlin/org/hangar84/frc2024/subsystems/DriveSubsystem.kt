@@ -17,13 +17,22 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.units.Measure
+import edu.wpi.first.units.MutableMeasure.mutable
 import edu.wpi.first.units.Units.Inches
 import edu.wpi.first.units.Units.Meters
+import edu.wpi.first.units.Units.MetersPerSecond
+import edu.wpi.first.units.Units.Volts
+import edu.wpi.first.units.Voltage
 import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.Encoder
+import edu.wpi.first.wpilibj.RobotController.getBatteryVoltage
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Subsystem
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import kotlin.math.abs
 
 /**
@@ -165,6 +174,36 @@ object DriveSubsystem : Subsystem {
                 DifferentialDriveWheelSpeeds(leftEncoder.rate, rightEncoder.rate),
             )
 
+    // -- Characterization --
+    private val appliedVoltage = mutable(Volts.of(0.0))
+    private val distance = mutable(Meters.of(0.0))
+    private val velocity = mutable(MetersPerSecond.of(0.0))
+
+    val identificationRoutine = SysIdRoutine(
+        SysIdRoutine.Config(),
+        SysIdRoutine.Mechanism(
+            /* drive = */
+            { voltage: Measure<Voltage> ->
+                val volts = voltage.`in`(Volts)
+                leftMotor.setVoltage(volts)
+                rightMotor.setVoltage(volts)
+            },
+            /* log = */
+            { log: SysIdRoutineLog ->
+                log.motor("drive/left")
+                    .voltage(appliedVoltage.mut_replace(leftMotor.get() * getBatteryVoltage(), Volts))
+                    .linearPosition(distance.mut_replace(leftEncoder.distance, Meters))
+                    .linearVelocity(velocity.mut_replace(leftEncoder.rate, MetersPerSecond))
+
+                log.motor("drive/right")
+                    .voltage(appliedVoltage.mut_replace(rightMotor.get() * getBatteryVoltage(), Volts))
+                    .linearPosition(distance.mut_replace(rightEncoder.distance, Meters))
+                    .linearVelocity(velocity.mut_replace(rightEncoder.rate, MetersPerSecond))
+            },
+            /* subsystem = */ this,
+        )
+    )
+
     init {
         rightMotor.inverted = true
         rightFollowerMotor.inverted = true
@@ -265,5 +304,14 @@ object DriveSubsystem : Subsystem {
         }
 
         differentialDrive.arcadeDrive(forwardSpeed, zRotation)
+    }
+
+    // -- Characterization Commands --
+    fun getQuasistaticTestCommand(direction: SysIdRoutine.Direction): Command {
+        return identificationRoutine.quasistatic(direction)
+    }
+
+    fun getDynamicTestCommand(direction: SysIdRoutine.Direction): Command {
+        return identificationRoutine.dynamic(direction)
     }
 }

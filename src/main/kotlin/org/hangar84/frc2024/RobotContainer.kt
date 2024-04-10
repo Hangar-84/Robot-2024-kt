@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.hangar84.frc2024.subsystems.DriveSubsystem
 import org.hangar84.frc2024.subsystems.LEDSubsystem
 import org.hangar84.frc2024.subsystems.LauncherSubsystem
@@ -58,10 +59,17 @@ object RobotContainer {
     /**
      * Method containing all controls and bindings for the robot.
      * ## Mappings:
+     * ### Teleoperated Controls
      * - **Left Joystick (Y-Axis)**: Drive (Forward/Backward)
      * - **Right Joystick (X-Axis)**: Drive (Turn Left/Right)
      * - **Left Trigger**: Launcher (Intake)
-     * - **Right Trigger**: Launcher (Shoot)
+     * - **Right Trigger**: Launcher (Launch)
+     *
+     * ### Characterization Controls
+     * - **X** + **Left Bumper**: Run quasi-static characterization test (reverse)
+     * - **X** + **Right Bumper**: Run quasi-static characterization test (forward)
+     * - **Y** + **Left Bumper**: Run dynamic characterization test (reverse)
+     * - **Y** + **Right Bumper**: Run dynamic characterization test (forward)
      */
     private fun configureBindings() {
         // Invert the Y-axis of the left joystick using our custom InvertibleCommandXboxController class.
@@ -88,6 +96,31 @@ object RobotContainer {
             LauncherSubsystem.run {
                 LauncherSubsystem.launcherMotor.set(-controller.leftTriggerAxis + controller.rightTriggerAxis)
             }
+
+        // -- Characterization-based commands --
+        controller
+            .x()
+            .and(controller.leftBumper())
+            .and(Robot::isTestEnabled)
+            .whileTrue(DriveSubsystem.getQuasistaticTestCommand(SysIdRoutine.Direction.kReverse))
+
+        controller
+            .x()
+            .and(controller.rightBumper())
+            .and(Robot::isTestEnabled)
+            .whileTrue(DriveSubsystem.getQuasistaticTestCommand(SysIdRoutine.Direction.kForward))
+
+        controller
+            .y()
+            .and(controller.leftBumper())
+            .and(Robot::isTestEnabled)
+            .whileTrue(DriveSubsystem.getDynamicTestCommand(SysIdRoutine.Direction.kReverse))
+
+        controller
+            .y()
+            .and(controller.rightBumper())
+            .and(Robot::isTestEnabled)
+            .whileTrue(DriveSubsystem.getDynamicTestCommand(SysIdRoutine.Direction.kForward))
     }
 
     private fun configureNamedCommands() {
