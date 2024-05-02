@@ -19,10 +19,7 @@ import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.MutableMeasure.mutable
-import edu.wpi.first.units.Units.Inches
-import edu.wpi.first.units.Units.Meters
-import edu.wpi.first.units.Units.MetersPerSecond
-import edu.wpi.first.units.Units.Volts
+import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.Voltage
 import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.Encoder
@@ -48,10 +45,6 @@ data object DataTable {
     val leftFollowerVoltageEntry: NetworkTableEntry = table.getEntry("Left Follower Voltage")
     val rightVoltageEntry: NetworkTableEntry = table.getEntry("Right Voltage")
     val rightFollowerVoltageEntry: NetworkTableEntry = table.getEntry("Right Follower Voltage")
-
-    val staticGainEntry: NetworkTableEntry = table.getEntry("Static Gain")
-    val velocityGainEntry: NetworkTableEntry = table.getEntry("Velocity Gain")
-    val accelerationGainEntry: NetworkTableEntry = table.getEntry("Acceleration Gain")
 }
 
 object DriveSubsystem : Subsystem {
@@ -128,24 +121,20 @@ object DriveSubsystem : Subsystem {
      * See: [WPILib Docs](https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/introduction-to-feedforward.html)
      * @see SimpleMotorFeedforward
      */
-    private var driveFeedforward = SimpleMotorFeedforward(1.1, 2.0, 0.0)
-
-    // TODO: Tune PID constants
-    private const val DRIVE_P = 0.0
-    private const val DRIVE_I = 0.0
-    private const val DRIVE_D = 0.0
+    private var leftFeedforward = SimpleMotorFeedforward(1.1766, 2.3023, 1.0419)
+    private var rightFeedforward = SimpleMotorFeedforward(1.2139, 2.3048, 1.1004)
 
     /**
      * The PID controller used to adjust the left motor's output based on the desired speed.
      * @see PIDController
      */
-    internal val leftPIDController = PIDController(DRIVE_P, DRIVE_I, DRIVE_D)
+    internal val leftPIDController = PIDController(0.00050476, 0.0, 0.0)
 
     /**
      * The PID controller used to adjust the right motor's output based on the desired speed.
      * @see PIDController
      */
-    internal val rightPIDController = PIDController(DRIVE_P, DRIVE_I, DRIVE_D)
+    internal val rightPIDController = PIDController(0.00000004005, 0.0, 0.0)
 
     /**
      * The current pose of the robot based on the differential drive odometry.
@@ -179,7 +168,7 @@ object DriveSubsystem : Subsystem {
     private val distance = mutable(Meters.of(0.0))
     private val velocity = mutable(MetersPerSecond.of(0.0))
 
-    val identificationRoutine = SysIdRoutine(
+    private val identificationRoutine = SysIdRoutine(
         SysIdRoutine.Config(),
         SysIdRoutine.Mechanism(
             /* drive = */
@@ -222,10 +211,6 @@ object DriveSubsystem : Subsystem {
         SmartDashboard.putData("Left Encoder", leftEncoder)
         SmartDashboard.putData("Right Encoder", rightEncoder)
         SmartDashboard.putData("IMU", imu)
-
-        DataTable.staticGainEntry.setDouble(driveFeedforward.ks)
-        DataTable.velocityGainEntry.setDouble(driveFeedforward.kv)
-        DataTable.accelerationGainEntry.setDouble(driveFeedforward.ka)
     }
 
     override fun periodic() {
@@ -242,14 +227,6 @@ object DriveSubsystem : Subsystem {
 
         DataTable.leftVelocityEntry.setDouble(leftEncoder.rate)
         DataTable.rightVelocityEntry.setDouble(rightEncoder.rate)
-
-        val staticGain = DataTable.staticGainEntry.getDouble(driveFeedforward.ks)
-        val velocityGain = DataTable.velocityGainEntry.getDouble(driveFeedforward.kv)
-        val accelerationGain = DataTable.accelerationGainEntry.getDouble(driveFeedforward.ka)
-
-        if (driveFeedforward.ks != staticGain || driveFeedforward.kv != velocityGain || driveFeedforward.ka != accelerationGain) {
-            driveFeedforward = SimpleMotorFeedforward(staticGain, velocityGain, accelerationGain)
-        }
     }
 
     /**
@@ -271,8 +248,8 @@ object DriveSubsystem : Subsystem {
     fun driveRelative(relativeSpeeds: ChassisSpeeds) {
         val wheelSpeeds = differentialDriveKinematics.toWheelSpeeds(relativeSpeeds)
 
-        val leftFed = driveFeedforward.calculate(wheelSpeeds.leftMetersPerSecond)
-        val rightFed = driveFeedforward.calculate(wheelSpeeds.rightMetersPerSecond)
+        val leftFed = leftFeedforward.calculate(wheelSpeeds.leftMetersPerSecond)
+        val rightFed = rightFeedforward.calculate(wheelSpeeds.rightMetersPerSecond)
 
         val leftOutput = leftPIDController.calculate(leftEncoder.rate, wheelSpeeds.leftMetersPerSecond)
         val rightOutput = rightPIDController.calculate(rightEncoder.rate, wheelSpeeds.rightMetersPerSecond)
