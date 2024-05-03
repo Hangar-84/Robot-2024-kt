@@ -5,7 +5,11 @@
 
 package org.hangar84.frc2024.animations
 
-import org.hangar84.frc2024.animationsystem.*
+import org.hangar84.frc2024.animationsystem.Animation
+import org.hangar84.frc2024.animationsystem.AnimationFrame
+import org.hangar84.frc2024.animationsystem.ColorMap
+import org.hangar84.frc2024.animationsystem.RGB
+import org.hangar84.frc2024.animationsystem.ZiaComponents
 
 object EmergencyAlertAnimation : Animation(
     frames =
@@ -65,10 +69,10 @@ object EmergencyAlertAnimation : Animation(
             ),
             AnimationFrame(
                 buffer =
-                listOf(
-                    ColorMap(ZiaComponents.CENTER_RING, RGB.BRIGHT_WHITE),
-                    ColorMap(ZiaComponents.ALL_RAYS, RGB.BRIGHT_RED),
-                ),
+                    listOf(
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.BRIGHT_WHITE),
+                        ColorMap(ZiaComponents.ALL_RAYS, RGB.BRIGHT_RED),
+                    ),
                 frameLength = 0.075,
                 frameGap = 0.075,
             ),

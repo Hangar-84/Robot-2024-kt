@@ -5,6 +5,9 @@
 
 package org.hangar84.frc2024.animationsystem
 
+/**
+ * A simple data class representing the 8-bit red, green, and blue components of an LED color.
+ */
 data class RGB(val r: Int, val g: Int, val b: Int) {
     companion object {
         val BLACK = RGB(0, 0, 0)

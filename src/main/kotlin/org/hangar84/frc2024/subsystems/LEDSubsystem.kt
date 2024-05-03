@@ -12,7 +12,13 @@ import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.hangar84.frc2024.Robot
-import org.hangar84.frc2024.animations.*
+import org.hangar84.frc2024.animations.AutonomousEnabledAnimation
+import org.hangar84.frc2024.animations.BlueTeamAnimation
+import org.hangar84.frc2024.animations.ClockAnimation
+import org.hangar84.frc2024.animations.EmergencyAlertAnimation
+import org.hangar84.frc2024.animations.EnabledAnimation
+import org.hangar84.frc2024.animations.RedTeamAnimation
+import org.hangar84.frc2024.animations.WaveAnimation
 import org.hangar84.frc2024.animationsystem.Animation
 import org.hangar84.frc2024.animationsystem.ZiaComponents
 import kotlin.jvm.optionals.getOrNull
@@ -25,7 +31,7 @@ object LEDSubsystem : SubsystemBase() {
     private val frameGapTimer = Timer()
     private val frameTimeTimer = Timer()
 
-    // -- Animations --
+    // -- Status Animations --
     private var lastAnimation: Animation? = null
     private val currentAnimation: Animation
         get() {
@@ -34,7 +40,7 @@ object LEDSubsystem : SubsystemBase() {
             } else if (DriverStation.getMatchTime() != -1.0 && Robot.isDisabled) {
                 return EmergencyAlertAnimation
             } else if (Robot.isDisabled && !DriverStation.isEStopped()) {
-                return CycloneAnimation
+                return WaveAnimation
             } else if (DriverStation.isEStopped()) {
                 return EmergencyAlertAnimation
             } else if (Robot.isAutonomousEnabled) {
@@ -53,6 +59,7 @@ object LEDSubsystem : SubsystemBase() {
 
             return EmergencyAlertAnimation
         }
+
     private var withinFrameGap = false
 
     init {
@@ -64,11 +71,16 @@ object LEDSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
+        // Reset the animation frame index when the animation changes
         if (lastAnimation != currentAnimation) {
             currentAnimation.resetFrameIndex()
             lastAnimation = currentAnimation
         }
 
+        /*
+         * If the frame time has elapsed, advance the frame. If the frame has a gap, wait for the gap to elapse before
+         * advancing to the next frame.
+         */
         if (frameTimeTimer.hasElapsed(currentAnimation.currentFrame.frameLength)) {
             frameTimeTimer.stop()
             frameTimeTimer.reset()
@@ -86,6 +98,7 @@ object LEDSubsystem : SubsystemBase() {
             return
         }
 
+        // If within a frame gap, wait for the gap to elapse before advancing to the next frame
         if (withinFrameGap && frameGapTimer.hasElapsed(currentAnimation.currentFrame.frameGap)) {
             frameGapTimer.stop()
             frameGapTimer.reset()
@@ -96,6 +109,7 @@ object LEDSubsystem : SubsystemBase() {
             frameTimeTimer.start()
         }
 
+        // If within a frame gap, do not update the LED buffer
         if (withinFrameGap) {
             return
         }

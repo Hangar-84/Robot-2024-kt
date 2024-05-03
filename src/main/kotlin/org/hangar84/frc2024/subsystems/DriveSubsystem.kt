@@ -19,7 +19,10 @@ import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.MutableMeasure.mutable
-import edu.wpi.first.units.Units.*
+import edu.wpi.first.units.Units.Inches
+import edu.wpi.first.units.Units.Meters
+import edu.wpi.first.units.Units.MetersPerSecond
+import edu.wpi.first.units.Units.Volts
 import edu.wpi.first.units.Voltage
 import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.Encoder
@@ -83,7 +86,7 @@ object DriveSubsystem : Subsystem {
      * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
      * @see Encoder
      */
-    internal val leftEncoder = Encoder(0, 1, true)
+    private val leftEncoder = Encoder(0, 1, true)
 
     /**
      * The right encoder used to track the distance traveled by the right side of the robot.
@@ -91,10 +94,10 @@ object DriveSubsystem : Subsystem {
      * Encoder model: [Through Bore Encoder](https://www.revrobotics.com/rev-11-1271/)
      * @see Encoder
      */
-    internal val rightEncoder = Encoder(2, 3, true)
+    private val rightEncoder = Encoder(2, 3, true)
 
     // -- Attributes --
-    val differentialDrive = DifferentialDrive(leftMotor, rightMotor)
+    private val differentialDrive = DifferentialDrive(leftMotor, rightMotor)
 
     /**
      * The odometry used to track the robot's position and orientation.
@@ -105,7 +108,6 @@ object DriveSubsystem : Subsystem {
             Rotation2d.fromDegrees(imu.angle),
             leftEncoder.distance,
             rightEncoder.distance,
-            // TODO: Configure initial pose(?)
             Pose2d(),
         )
 
@@ -125,16 +127,16 @@ object DriveSubsystem : Subsystem {
     private var rightFeedforward = SimpleMotorFeedforward(1.2139, 2.3048, 1.1004)
 
     /**
-     * The PID controller used to adjust the left motor's output based on the desired speed.
+     * The PID controller used to adjust the left motor's output based on the desired velocity.
      * @see PIDController
      */
-    internal val leftPIDController = PIDController(0.00050476, 0.0, 0.0)
+    private val leftVelocityPIDController = PIDController(0.014414, 0.0, 0.0)
 
     /**
-     * The PID controller used to adjust the right motor's output based on the desired speed.
+     * The PID controller used to adjust the right motor's output based on the desired velocity.
      * @see PIDController
      */
-    internal val rightPIDController = PIDController(0.00000004005, 0.0, 0.0)
+    private val rightVelocityPIDController = PIDController(0.00000004005, 0.0, 0.0)
 
     /**
      * The current pose of the robot based on the differential drive odometry.
@@ -168,30 +170,32 @@ object DriveSubsystem : Subsystem {
     private val distance = mutable(Meters.of(0.0))
     private val velocity = mutable(MetersPerSecond.of(0.0))
 
-    private val identificationRoutine = SysIdRoutine(
-        SysIdRoutine.Config(),
-        SysIdRoutine.Mechanism(
-            /* drive = */
-            { voltage: Measure<Voltage> ->
-                val volts = voltage.`in`(Volts)
-                leftMotor.setVoltage(volts)
-                rightMotor.setVoltage(volts)
-            },
-            /* log = */
-            { log: SysIdRoutineLog ->
-                log.motor("drive/left")
-                    .voltage(appliedVoltage.mut_replace(leftMotor.get() * getBatteryVoltage(), Volts))
-                    .linearPosition(distance.mut_replace(leftEncoder.distance, Meters))
-                    .linearVelocity(velocity.mut_replace(leftEncoder.rate, MetersPerSecond))
+    private val identificationRoutine =
+        SysIdRoutine(
+            SysIdRoutine.Config(),
+            SysIdRoutine.Mechanism(
+                // drive =
+                { voltage: Measure<Voltage> ->
+                    val volts = voltage.`in`(Volts)
+                    leftMotor.setVoltage(volts)
+                    rightMotor.setVoltage(volts)
+                },
+                // log =
+                { log: SysIdRoutineLog ->
+                    log.motor("drive/left")
+                        .voltage(appliedVoltage.mut_replace(leftMotor.get() * getBatteryVoltage(), Volts))
+                        .linearPosition(distance.mut_replace(leftEncoder.distance, Meters))
+                        .linearVelocity(velocity.mut_replace(leftEncoder.rate, MetersPerSecond))
 
-                log.motor("drive/right")
-                    .voltage(appliedVoltage.mut_replace(rightMotor.get() * getBatteryVoltage(), Volts))
-                    .linearPosition(distance.mut_replace(rightEncoder.distance, Meters))
-                    .linearVelocity(velocity.mut_replace(rightEncoder.rate, MetersPerSecond))
-            },
-            /* subsystem = */ this,
+                    log.motor("drive/right")
+                        .voltage(appliedVoltage.mut_replace(rightMotor.get() * getBatteryVoltage(), Volts))
+                        .linearPosition(distance.mut_replace(rightEncoder.distance, Meters))
+                        .linearVelocity(velocity.mut_replace(rightEncoder.rate, MetersPerSecond))
+                },
+                // subsystem =
+                this,
+            ),
         )
-    )
 
     init {
         rightMotor.inverted = true
@@ -206,8 +210,8 @@ object DriveSubsystem : Subsystem {
         leftEncoder.reset()
         rightEncoder.reset()
 
-        SmartDashboard.putData("Left PID Controller", leftPIDController)
-        SmartDashboard.putData("Right PID Controller", rightPIDController)
+        SmartDashboard.putData("Left PID Controller", leftVelocityPIDController)
+        SmartDashboard.putData("Right PID Controller", rightVelocityPIDController)
         SmartDashboard.putData("Left Encoder", leftEncoder)
         SmartDashboard.putData("Right Encoder", rightEncoder)
         SmartDashboard.putData("IMU", imu)
@@ -251,8 +255,8 @@ object DriveSubsystem : Subsystem {
         val leftFed = leftFeedforward.calculate(wheelSpeeds.leftMetersPerSecond)
         val rightFed = rightFeedforward.calculate(wheelSpeeds.rightMetersPerSecond)
 
-        val leftOutput = leftPIDController.calculate(leftEncoder.rate, wheelSpeeds.leftMetersPerSecond)
-        val rightOutput = rightPIDController.calculate(rightEncoder.rate, wheelSpeeds.rightMetersPerSecond)
+        val leftOutput = leftVelocityPIDController.calculate(leftEncoder.rate, wheelSpeeds.leftMetersPerSecond)
+        val rightOutput = rightVelocityPIDController.calculate(rightEncoder.rate, wheelSpeeds.rightMetersPerSecond)
 
         leftMotor.setVoltage(leftFed + leftOutput)
         rightMotor.setVoltage(rightFed + rightOutput)

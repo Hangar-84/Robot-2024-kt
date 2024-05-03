@@ -5,6 +5,9 @@
 
 package org.hangar84.frc2024.animationsystem
 
+/**
+ * A collection of constants representing the various components of the Zia LED strip.
+ */
 object ZiaComponents {
     const val LED_COUNT = 48
 

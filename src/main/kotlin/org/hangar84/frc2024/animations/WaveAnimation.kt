@@ -5,7 +5,11 @@
 
 package org.hangar84.frc2024.animations
 
-import org.hangar84.frc2024.animationsystem.*
+import org.hangar84.frc2024.animationsystem.Animation
+import org.hangar84.frc2024.animationsystem.AnimationFrame
+import org.hangar84.frc2024.animationsystem.ColorMap
+import org.hangar84.frc2024.animationsystem.RGB
+import org.hangar84.frc2024.animationsystem.ZiaComponents
 
 object WaveAnimation : Animation(
     frames =

@@ -5,7 +5,11 @@
 
 package org.hangar84.frc2024.animations
 
-import org.hangar84.frc2024.animationsystem.*
+import org.hangar84.frc2024.animationsystem.Animation
+import org.hangar84.frc2024.animationsystem.AnimationFrame
+import org.hangar84.frc2024.animationsystem.ColorMap
+import org.hangar84.frc2024.animationsystem.RGB
+import org.hangar84.frc2024.animationsystem.ZiaComponents
 
 object AutonomousEnabledAnimation : Animation(
     frames =
@@ -97,35 +101,35 @@ object AutonomousEnabledAnimation : Animation(
             ),
             AnimationFrame(
                 buffer =
-                listOf(
-                    ColorMap(ZiaComponents.RING_3, RGB.AMBER),
-                    ColorMap(ZiaComponents.ALL_TIPS, RGB.AMBER),
-                ),
+                    listOf(
+                        ColorMap(ZiaComponents.RING_3, RGB.AMBER),
+                        ColorMap(ZiaComponents.ALL_TIPS, RGB.AMBER),
+                    ),
                 frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
-                listOf(
-                    ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
-                    ColorMap(ZiaComponents.RING_2, RGB.AMBER),
-                    ColorMap(ZiaComponents.RING_3, RGB.AMBER),
-                ),
+                    listOf(
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
+                        ColorMap(ZiaComponents.RING_2, RGB.AMBER),
+                        ColorMap(ZiaComponents.RING_3, RGB.AMBER),
+                    ),
                 frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
-                listOf(
-                    ColorMap(ZiaComponents.RING_1, RGB.AMBER),
-                    ColorMap(ZiaComponents.RING_2, RGB.AMBER),
-                ),
+                    listOf(
+                        ColorMap(ZiaComponents.RING_1, RGB.AMBER),
+                        ColorMap(ZiaComponents.RING_2, RGB.AMBER),
+                    ),
                 frameLength = 0.10,
             ),
             AnimationFrame(
                 buffer =
-                listOf(
-                    ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
-                    ColorMap(ZiaComponents.RING_1, RGB.AMBER),
-                ),
+                    listOf(
+                        ColorMap(ZiaComponents.CENTER_RING, RGB.RED),
+                        ColorMap(ZiaComponents.RING_1, RGB.AMBER),
+                    ),
                 frameLength = 0.10,
             ),
         ),

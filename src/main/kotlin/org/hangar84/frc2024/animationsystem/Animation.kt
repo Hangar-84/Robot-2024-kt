@@ -5,6 +5,13 @@
 
 package org.hangar84.frc2024.animationsystem
 
+/**
+ * Represents an entire animation, consisting of multiple frames.
+ * @param frames The frames that make up the animation.
+ * @property currentFrameIndex The index of the current frame.
+ * @property currentFrame The current frame.
+ * @see AnimationFrame
+ */
 open class Animation(private val frames: List<AnimationFrame>) {
     var currentFrameIndex = 0
         private set

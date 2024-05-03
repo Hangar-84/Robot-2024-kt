@@ -7,6 +7,11 @@ package org.hangar84.frc2024.wrappers
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 
+/**
+ * A wrapper for the XboxController that allows inverting the axes.
+ *
+ * @param port The port index on the Driver Station that the controller is plugged into.
+ */
 class InvertibleCommandXboxController(port: Int) : CommandXboxController(port) {
     var xAxisInverted = false
     var yAxisInverted = false
